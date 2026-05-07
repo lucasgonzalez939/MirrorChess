@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ajedrez Espejo</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#2c3e50">
+</head>
+<body>
+    <div id="app">
+        <header>
+            <div class="stats">
+                <div class="score">Rey Blanco: <span id="scoreA">0</span></div>
+                <div class="score">Rey Negro: <span id="scoreB">0</span></div>
+            </div>
+            <div id="status-msg">Blancas empiezan. Mueve una casilla, luego Negras deben espejar.</div>
+        </header>
+
+        <div id="game-container">
+            <div id="board" class="board"></div>
+        </div>
+
+        <footer>
+            <button id="reset-btn">Reiniciar Partida</button>
+            <div class="rule-hint">Eje de espejo: horizontal (el movimiento del rey superior se refleja en el rey inferior).</div>
+        </footer>
+    </div>
+    <script src="./game.js" type="module"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js');
+        }
+    </script>
+</body>
+</html>
