@@ -134,7 +134,7 @@ header {
 
 .exit-a::after,
 .exit-b::after {
-    content: "EXIT";
+    content: "SALIDA";
     position: absolute;
     left: 50%;
     top: 50%;
