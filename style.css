@@ -25,6 +25,77 @@ body {
     font-family: "Trebuchet MS", "Segoe UI", sans-serif;
 }
 
+.menu-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(17, 25, 20, 0.64);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    z-index: 20;
+}
+
+.menu-overlay.hidden {
+    display: none;
+}
+
+.menu-card {
+    width: min(680px, 100%);
+    background: #f6faf6;
+    border: 1px solid #bec8bf;
+    border-radius: 16px;
+    padding: 1.2rem;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.22);
+}
+
+.menu-card h1 {
+    margin: 0;
+}
+
+.menu-subtitle {
+    margin: 0.35rem 0 1rem;
+    color: #526257;
+}
+
+.mode-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0.55rem;
+}
+
+.mode-option {
+    border: 1px solid #bac5bb;
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 0.7rem 0.6rem;
+    cursor: pointer;
+    font-weight: 700;
+    color: #334036;
+}
+
+.mode-option.selected {
+    border-color: #2a6d53;
+    box-shadow: inset 0 0 0 2px rgba(42, 109, 83, 0.25);
+    background: #ebf4ee;
+}
+
+.mode-description {
+    min-height: 2.1rem;
+    margin: 0.75rem 0;
+    color: #4c5b50;
+}
+
+.primary-btn {
+    border: none;
+    border-radius: 10px;
+    padding: 0.7rem 1.05rem;
+    background: #266a51;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+}
+
 #app {
     max-width: 860px;
     margin: 0 auto;
@@ -57,6 +128,19 @@ header {
     color: #3d4a43;
 }
 
+.goal-display {
+    margin-top: 0.35rem;
+    padding: 0.25rem 0.75rem;
+    background: linear-gradient(90deg, #7b3f00, #c06000, #7b3f00);
+    color: #fff8e7;
+    font-weight: 700;
+    font-size: clamp(0.75rem, 1.8vmin, 1rem);
+    border-radius: 999px;
+    letter-spacing: 0.04em;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+
 #game-container {
     margin: 1rem 0;
     display: flex;
@@ -84,6 +168,30 @@ header {
     background: linear-gradient(90deg, rgba(170, 48, 74, 0.5), rgba(170, 48, 74, 0.85), rgba(170, 48, 74, 0.5));
     transform: translateY(-50%);
     pointer-events: none;
+    transition: opacity 0.25s;
+}
+
+.board[data-mirror-axis="vertical"]::after {
+    opacity: 0;
+}
+
+.board::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 4px;
+    background: linear-gradient(180deg, rgba(48, 100, 170, 0.5), rgba(48, 100, 170, 0.85), rgba(48, 100, 170, 0.5));
+    transform: translateX(-50%);
+    pointer-events: none;
+    z-index: 3;
+    opacity: 0;
+    transition: opacity 0.25s;
+}
+
+.board[data-mirror-axis="vertical"]::before {
+    opacity: 1;
 }
 
 .square {
@@ -147,14 +255,14 @@ header {
 }
 
 .king-mark {
-    width: 72%;
+    width: 84%;
     aspect-ratio: 1 / 1;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 800;
-    font-size: clamp(1rem, 2.7vmin, 1.9rem);
+    font-size: clamp(1.3rem, 3.8vmin, 2.6rem);
     box-shadow: 0 2px 7px rgba(0, 0, 0, 0.28);
     position: relative;
     z-index: 1;
@@ -208,14 +316,14 @@ header {
 }
 
 .coin {
-    width: 64%;
+    width: 76%;
     aspect-ratio: 1 / 1;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 800;
-    font-size: clamp(0.65rem, 2vmin, 1.4rem);
+    font-size: clamp(0.85rem, 2.8vmin, 1.8rem);
     color: #fdfcf9;
     border: 2px solid rgba(255, 255, 255, 0.7);
     box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.12);
@@ -245,8 +353,24 @@ header {
 footer {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     gap: 0.75rem;
+}
+
+.footer-controls {
+    display: flex;
+    gap: 0.45rem;
+}
+
+.footer-info {
+    display: grid;
+    justify-items: end;
+    gap: 0.25rem;
+}
+
+.mode-name {
+    font-weight: 800;
+    color: #2f3c34;
 }
 
 #reset-btn {
@@ -259,8 +383,22 @@ footer {
     cursor: pointer;
 }
 
+#menu-btn {
+    border: none;
+    border-radius: 10px;
+    padding: 0.6rem 0.9rem;
+    background: #3e4f45;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+}
+
 #reset-btn:hover {
     filter: brightness(1.05);
+}
+
+#menu-btn:hover {
+    filter: brightness(1.08);
 }
 
 .rule-hint {
@@ -273,6 +411,10 @@ footer {
     footer {
         flex-direction: column;
         align-items: flex-start;
+    }
+
+    .footer-info {
+        justify-items: start;
     }
 
     .board {

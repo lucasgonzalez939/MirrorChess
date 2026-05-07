@@ -1,34 +1,113 @@
 <!DOCTYPE html>
+<!--
+  index.html — Ajedrez Espejo
+  Shell PWA de una sola página. No contiene lógica de juego: toda la lógica
+  vive en game.js (módulo ES). El DOM que game.js manipula en tiempo de
+  ejecución está estructurado en dos zonas principales:
+
+    1. #welcome-menu  — overlay de selección de modo, visible al inicio y al
+                        pulsar "Cambiar Modo". game.js lo oculta/muestra.
+    2. #app           — interfaz de juego: header de puntos, tablero y footer.
+-->
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <!-- Viewport fijo para móvil: sin zoom del usuario, tamaño exacto de pantalla. -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Ajedrez Espejo</title>
+    <meta name="description" content="Juego de ajedrez espejo para dos jugadores locales.">
+
+    <!-- PWA: instalación en Android (Chrome/Edge) -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <!-- PWA: instalación en iOS (Safari) -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <!-- Barra de estado iOS en modo standalone -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Nombre del icono en la pantalla de inicio de iOS -->
+    <meta name="apple-mobile-web-app-title" content="Espejo">
+    <!-- Icono para la pantalla de inicio de iOS (SVG local para evitar dependencia CDN) -->
+    <link rel="apple-touch-icon" href="./icon.svg">
+
     <link rel="stylesheet" href="./style.css">
+    <!-- Manifest de la PWA: nombre, icono, colores, orientación, etc. -->
     <link rel="manifest" href="./manifest.json">
-    <meta name="theme-color" content="#2c3e50">
+    <!-- Color de la barra del navegador en Android -->
+    <meta name="theme-color" content="#e94560">
 </head>
 <body>
+    <!--
+      #welcome-menu: overlay de pantalla completa que cubre #app.
+      game.js añade/quita la clase "hidden" para mostrarlo u ocultarlo.
+      Contiene:
+        #mode-list        — botones generados dinámicamente por setupModeMenu()
+        #mode-description — descripción del modo seleccionado (actualizada en JS)
+        #start-btn        — confirma la selección e inicia la partida
+    -->
+    <div id="welcome-menu" class="menu-overlay">
+        <div class="menu-card">
+            <h1>Ajedrez Espejo</h1>
+            <p class="menu-subtitle">Elige un modo para comenzar.</p>
+            <!-- Los botones de modo se insertan aquí por setupModeMenu() -->
+            <div id="mode-list" class="mode-list"></div>
+            <!-- Descripción del modo actualmente seleccionado -->
+            <p id="mode-description" class="mode-description"></p>
+            <button id="start-btn" class="primary-btn">Iniciar Partida</button>
+        </div>
+    </div>
+
+    <!--
+      #app: contenedor principal del juego, siempre en el DOM.
+      Queda debajo del overlay cuando #welcome-menu está visible.
+    -->
     <div id="app">
         <header>
+            <!-- Marcadores de puntos, actualizados por updateUI() -->
             <div class="stats">
                 <div class="score">Rey Blanco: <span id="scoreA">0</span></div>
                 <div class="score">Rey Negro: <span id="scoreB">0</span></div>
             </div>
+            <!-- Mensaje de turno / resultado, actualizado por updateUI() -->
             <div id="status-msg">Blancas empiezan. Mueve una casilla, luego Negras deben espejar.</div>
+            <!--
+              Banner de meta de puntos: visible solo en el modo "Meta de Puntos".
+              Muestra la meta y la distancia actual de cada jugador.
+              game.js controla el atributo hidden.
+            -->
+            <div id="goal-display" class="goal-display" hidden></div>
         </header>
 
+        <!-- El tablero 8×8 se construye completamente en JS por render(). -->
         <div id="game-container">
             <div id="board" class="board"></div>
         </div>
 
         <footer>
-            <button id="reset-btn">Reiniciar Partida</button>
-            <div class="rule-hint">Eje de espejo: horizontal (el movimiento del rey superior se refleja en el rey inferior).</div>
+            <div class="footer-controls">
+                <!-- Reinicia la partida con el mismo modo; no regresa al menú. -->
+                <button id="reset-btn">Reiniciar Partida</button>
+                <!-- Abre el menú para cambiar de modo (registrado en setupModeMenu). -->
+                <button id="menu-btn">Cambiar Modo</button>
+            </div>
+            <div class="footer-info">
+                <!-- Nombre del modo activo, actualizado por updateUI(). -->
+                <div id="mode-name" class="mode-name">Modo: Normal</div>
+                <!-- Pista de reglas del modo activo (+ eje de espejo si aplica). -->
+                <div id="rule-hint" class="rule-hint">Eje de espejo: horizontal (el movimiento del rey superior se refleja en el rey inferior).</div>
+            </div>
         </footer>
     </div>
+
+    <!--
+      game.js carga como módulo ES: tiene acceso a import/export y
+      se ejecuta en modo estricto de forma implícita.
+    -->
     <script src="./game.js" type="module"></script>
     <script>
+        /*
+         * Registro del Service Worker para soporte offline e instalación PWA.
+         * Solo se registra si el navegador lo soporta (todos los navegadores modernos).
+         * El SW usa estrategia network-first para HTML/CSS/JS y cache-first para el resto.
+         */
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('./sw.js');
         }
