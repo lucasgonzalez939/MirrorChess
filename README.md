@@ -2,9 +2,13 @@
 
 Juego de tablero para **dos jugadores locales** en el mismo dispositivo, inspirado en el ajedrez pero con reglas propias basadas en el concepto de simetría espejo.
 
+Este juego esta basado inicialmente en el desafío propuesto por Leontxio García y Esteban Jaureguizar, en el video https://youtu.be/g65y8OgEB2I?si=nSLOO2VYeYiepQRx 
+
+Los modos, excluyendo el "normal", son propuestas que salieron de mi imaginación y tienen la intención de desafiar aún más al jugador.
+
 ## Concepto
 
-Dos reyes se mueven en lados opuestos de un tablero 8×8 lleno de monedas con valor. En cada turno, un jugador mueve libremente (**líder**) y el otro debe replicar ese mismo movimiento reflejado (**respondedor**). El objetivo es acumular puntos recogiendo monedas y llegar a la casilla de salida propia.
+Dos reyes se mueven en lados opuestos de un tablero de ajedrez (8×8) lleno de monedas con valores. En cada turno, un jugador mueve libremente (**líder**) y el otro debe replicar ese mismo movimiento reflejado (**respondedor**). El objetivo es acumular puntos recogiendo monedas y llegar a la casilla de salida propia.
 
 El papel de líder y respondedor se alterna en cada turno completo, por lo que ambos jugadores toman decisiones activas en todo momento.
 
