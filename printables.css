@@ -1,0 +1,201 @@
+:root {
+    --bg: #f1efe6;
+    --panel: #fffdf7;
+    --ink: #2f2b1f;
+    --muted: #655f4a;
+    --accent: #2f6c5f;
+    --accent-dark: #245247;
+    --line: #d5ceb9;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    color: var(--ink);
+    font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+    background:
+        radial-gradient(circle at 12% 8%, #fff8d4 0%, rgba(255, 248, 212, 0.65) 22%, transparent 45%),
+        radial-gradient(circle at 88% 14%, #e1f2ea 0%, rgba(225, 242, 234, 0.7) 25%, transparent 46%),
+        linear-gradient(180deg, #f9f6ea 0%, var(--bg) 100%);
+}
+
+.page {
+    width: min(1080px, 92vw);
+    margin: 2rem auto;
+    display: grid;
+    gap: 1.2rem;
+}
+
+.hero,
+.panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 1.2rem;
+    box-shadow: 0 10px 28px rgba(47, 43, 31, 0.12);
+}
+
+.kicker {
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-size: 0.78rem;
+    color: #7b7358;
+    font-weight: 700;
+}
+
+.hero h1 {
+    margin: 0.25rem 0;
+    font-size: clamp(1.6rem, 3.4vw, 2.4rem);
+}
+
+.hero p {
+    margin: 0.2rem 0;
+    color: var(--muted);
+    max-width: 75ch;
+}
+
+.hero-actions {
+    margin-top: 0.9rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+}
+
+.primary-btn,
+.download-btn,
+.ghost-btn {
+    border-radius: 10px;
+    border: 1px solid transparent;
+    padding: 0.58rem 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.primary-btn,
+.download-btn {
+    background: var(--accent);
+    color: #fff;
+}
+
+.primary-btn:hover,
+.download-btn:hover {
+    background: var(--accent-dark);
+}
+
+.ghost-btn {
+    background: #fff;
+    color: var(--ink);
+    border-color: #b6ad92;
+}
+
+.ghost-btn:hover {
+    background: #f4efdf;
+}
+
+.panel h2 {
+    margin: 0;
+}
+
+.panel-text {
+    margin: 0.35rem 0 0.95rem;
+    color: var(--muted);
+}
+
+.download-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 0.7rem;
+}
+
+.download-card {
+    border: 1px solid #d3ccb5;
+    border-radius: 12px;
+    background: #fff;
+    padding: 0.85rem;
+    display: grid;
+    gap: 0.5rem;
+}
+
+.download-card h3 {
+    margin: 0;
+}
+
+.download-card p {
+    margin: 0;
+    color: var(--muted);
+    min-height: 2.7rem;
+}
+
+.print-config {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 0.6rem;
+    margin-bottom: 0.8rem;
+}
+
+.field {
+    display: grid;
+    gap: 0.25rem;
+}
+
+.field span {
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: #5f5640;
+}
+
+.field select {
+    width: 100%;
+    border: 1px solid #c9c0a6;
+    border-radius: 8px;
+    background: #fff;
+    color: var(--ink);
+    padding: 0.44rem 0.5rem;
+    font-weight: 700;
+}
+
+.field-wide {
+    grid-column: span 2;
+}
+
+.preview {
+    min-height: 240px;
+    border: 1px dashed #c9c0a6;
+    border-radius: 12px;
+    background: #fcfbf6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.8rem;
+    overflow: auto;
+}
+
+.preview svg {
+    width: min(540px, 100%);
+    height: auto;
+}
+
+@media (max-width: 640px) {
+    .page {
+        width: 95vw;
+        margin: 1rem auto;
+    }
+
+    .hero,
+    .panel {
+        padding: 0.95rem;
+    }
+
+    .field-wide {
+        grid-column: span 1;
+    }
+}

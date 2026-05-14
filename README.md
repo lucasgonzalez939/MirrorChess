@@ -66,8 +66,39 @@ Las monedas tienen cinco valores distintos, cada uno con su propio color:
 MirrorChess/
 ├── index.html      # Shell PWA: menú de modos y estructura del juego
 ├── game.js         # Motor de juego completo (lógica, estado, renderizado)
+├── printables.html # Pagina de descargas para material imprimible (SVG)
+├── printables.js   # Generador de tableros y fichas imprimibles
+├── printables.css  # Estilos de la pagina de impresion
 ├── style.css       # Diseño visual completo
 ├── sw.js           # Service Worker (caché offline, estrategia network-first)
 ├── manifest.json   # Manifiesto PWA (nombre, icono, colores, orientación)
 └── icon.svg        # Icono local de la aplicación (reyes + línea espejo)
 ```
+
+## Material imprimible
+
+La app incluye una URL dedicada para descargas de impresion:
+
+- `./printables.html`
+
+Desde esa pagina puedes descargar en formato SVG:
+
+- Tablero limpio.
+- Tablero con monedas aleatorias equilibradas.
+- Hoja de monedas equilibradas (igual cantidad por valor: 3, 5, 10, 15, 20).
+- Hoja de reyes.
+- Set completo (monedas + reyes).
+
+Opciones de impresion disponibles en la misma pagina:
+
+- Formatos de papel: A4, Carta, A3.
+- Orientacion: vertical u horizontal.
+- Margenes preconfigurados (6, 10, 15 mm).
+- Seleccion del documento a imprimir (tableros y hojas de piezas).
+
+Sugerencia para PDF: abrir la vista previa y usar la opcion de imprimir del navegador para guardar como PDF.
+
+
+Recursos externos:
+El espejo, cuya licencia es de dominio publico, fue tomado de la siguiente pagina 
+https://freesvg.org/vector-graphics-of-freestanding-mirror-with-wooden-frame

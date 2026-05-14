@@ -21,10 +21,21 @@
  */
 
 /** Nombre del caché activo. Cambiar al publicar una nueva versión. */
-const CACHE_NAME = 'mirror-chess-v3';
+const CACHE_NAME = 'mirror-chess-v4';
 
 /** Lista de assets pre-cacheados durante la instalación del SW. */
-const CORE_ASSETS = ['./', './index.html', './style.css', './game.js', './manifest.json', './icon.svg'];
+const CORE_ASSETS = [
+    './',
+    './index.html',
+    './style.css',
+    './game.js',
+    './manifest.json',
+    './icon.svg',
+    './espejo.svg',
+    './printables.html',
+    './printables.css',
+    './printables.js'
+];
 
 /**
  * Evento install: pre-cachea todos los CORE_ASSETS.

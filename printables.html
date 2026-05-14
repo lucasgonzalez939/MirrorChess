@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajedrez Espejo - Material Imprimible</title>
+    <meta name="description" content="Descarga material imprimible en SVG para Ajedrez Espejo.">
+    <link rel="stylesheet" href="./printables.css">
+</head>
+<body>
+    <main class="page">
+        <header class="hero">
+            <p class="kicker">Ajedrez Espejo</p>
+            <h1>Material imprimible en alta calidad</h1>
+            <p>
+                Descarga archivos SVG listos para imprimir: tablero limpio, tablero con monedas
+                aleatorias equilibradas, fichas de monedas por valor y reyes.
+            </p>
+            <div class="hero-actions">
+                <a class="ghost-btn" href="./index.html">Volver al juego</a>
+                <button id="regen-board" class="primary-btn" type="button">Regenerar tablero aleatorio</button>
+            </div>
+        </header>
+
+        <section class="panel">
+            <h2>Descargas</h2>
+            <p class="panel-text">
+                Todos los archivos son SVG vectoriales (sin perdida de calidad al escalar). Para PDF,
+                abre la vista previa y usa imprimir del navegador.
+            </p>
+            <div class="download-grid">
+                <article class="download-card">
+                    <h3>Tablero limpio</h3>
+                    <p>Tablero 8x8 con linea de espejo y salidas.</p>
+                    <button id="download-clean-board" class="download-btn" type="button">Descargar SVG</button>
+                </article>
+                <article class="download-card">
+                    <h3>Tablero con monedas</h3>
+                    <p>Distribucion aleatoria con cantidades iguales por valor.</p>
+                    <button id="download-random-board" class="download-btn" type="button">Descargar SVG</button>
+                </article>
+                <article class="download-card">
+                    <h3>Monedas equilibradas</h3>
+                    <p>Hoja de monedas con igual cantidad por valor (3, 5, 10, 15, 20).</p>
+                    <button id="download-coins-sheet" class="download-btn" type="button">Descargar SVG</button>
+                </article>
+                <article class="download-card">
+                    <h3>Reyes</h3>
+                    <p>Hoja de reyes blanco y negro para recortar.</p>
+                    <button id="download-kings-sheet" class="download-btn" type="button">Descargar SVG</button>
+                </article>
+                <article class="download-card">
+                    <h3>Set completo</h3>
+                    <p>Monedas equilibradas + reyes en una sola hoja.</p>
+                    <button id="download-full-sheet" class="download-btn" type="button">Descargar SVG</button>
+                </article>
+            </div>
+        </section>
+
+        <section class="panel preview-panel">
+            <h2>Vista previa de tablero aleatorio</h2>
+            <p class="panel-text">
+                Este tablero usa 60 monedas en total: 12 de cada valor, ubicadas de forma aleatoria.
+            </p>
+            <div class="print-config" aria-label="Configuracion de impresion">
+                <label class="field">
+                    <span>Formato</span>
+                    <select id="paper-size">
+                        <option value="a4">A4 (210 x 297 mm)</option>
+                        <option value="letter">Carta (216 x 279 mm)</option>
+                        <option value="a3">A3 (297 x 420 mm)</option>
+                    </select>
+                </label>
+                <label class="field">
+                    <span>Orientacion</span>
+                    <select id="paper-orientation">
+                        <option value="portrait">Vertical</option>
+                        <option value="landscape">Horizontal</option>
+                    </select>
+                </label>
+                <label class="field">
+                    <span>Margen</span>
+                    <select id="paper-margin">
+                        <option value="6">Estrecho (6 mm)</option>
+                        <option value="10" selected>Normal (10 mm)</option>
+                        <option value="15">Amplio (15 mm)</option>
+                    </select>
+                </label>
+                <label class="field field-wide">
+                    <span>Documento a imprimir / PDF</span>
+                    <select id="print-target">
+                        <option value="board-random">Tablero aleatorio equilibrado</option>
+                        <option value="board-clean">Tablero limpio</option>
+                        <option value="coins">Hoja de monedas</option>
+                        <option value="kings">Hoja de reyes</option>
+                        <option value="full">Set completo</option>
+                    </select>
+                </label>
+            </div>
+            <div id="preview" class="preview" aria-live="polite"></div>
+            <button id="print-selected" class="ghost-btn" type="button">Imprimir seleccionado / guardar PDF</button>
+        </section>
+    </main>
+
+    <script src="./printables.js" type="module"></script>
+</body>
+</html>

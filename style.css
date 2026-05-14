@@ -246,16 +246,22 @@ header {
 
 .exit-a::after,
 .exit-b::after {
-    content: "SALIDA";
+    content: "";
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    letter-spacing: 0.04em;
-    font-size: 0.65rem;
-    font-weight: 800;
-    color: #8d1f35;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+    width: 68%;
+    aspect-ratio: 100.25 / 92.405;
+    background: center / contain no-repeat url("./espejo.svg");
+    filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.28));
+}
+
+@media (min-width: 700px) {
+    .exit-a::after,
+    .exit-b::after {
+        width: 78%;
+    }
 }
 
 .king-mark {
@@ -397,11 +403,27 @@ footer {
     cursor: pointer;
 }
 
+#printables-link {
+    border: none;
+    border-radius: 10px;
+    padding: 0.6rem 0.9rem;
+    background: #2a6d53;
+    color: #fff;
+    font-weight: 700;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+}
+
 #reset-btn:hover {
     filter: brightness(1.05);
 }
 
 #menu-btn:hover {
+    filter: brightness(1.08);
+}
+
+#printables-link:hover {
     filter: brightness(1.08);
 }
 
