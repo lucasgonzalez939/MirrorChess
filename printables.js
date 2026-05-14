@@ -92,6 +92,10 @@ function buildBalancedCoinPool() {
 }
 
 function drawCoin(g, cx, cy, r, value, rotate180 = false) {
+    const strokeWidth = Math.max(1.5, r * 0.09);
+    const fontSize = Math.max(12, r * 0.88);
+    const textY = cy + fontSize * 0.28;
+
     if (!rotate180) {
         addCircle(g, {
             cx,
@@ -99,15 +103,15 @@ function drawCoin(g, cx, cy, r, value, rotate180 = false) {
             r,
             fill: COIN_COLOR[value],
             stroke: "#ffffff",
-            "stroke-width": 3
+            "stroke-width": strokeWidth
         });
         addText(
             g,
             {
                 x: cx,
-                y: cy + 8,
+                y: textY,
                 "text-anchor": "middle",
-                "font-size": 30,
+                "font-size": fontSize,
                 "font-family": "Trebuchet MS, Segoe UI, sans-serif",
                 "font-weight": "800",
                 fill: "#ffffff"
@@ -124,15 +128,15 @@ function drawCoin(g, cx, cy, r, value, rotate180 = false) {
             r,
             fill: COIN_COLOR[value],
             stroke: "#ffffff",
-            "stroke-width": 3
+            "stroke-width": strokeWidth
         });
         addText(
             group,
             {
                 x: cx,
-                y: cy + 8,
+                y: textY,
                 "text-anchor": "middle",
-                "font-size": 30,
+                "font-size": fontSize,
                 "font-family": "Trebuchet MS, Segoe UI, sans-serif",
                 "font-weight": "800",
                 fill: "#ffffff"
@@ -200,6 +204,27 @@ function drawExitIcon(group, x, y, cell, rotate180 = false) {
     }
 }
 
+function getBoardLayoutMetrics(pageWidthMm, pageHeightMm) {
+    const unitsPerMm = 10;
+    const width = Math.round(pageWidthMm * unitsPerMm);
+    const height = Math.round(pageHeightMm * unitsPerMm);
+
+    const boardPx = Math.floor(Math.min(width, height));
+    const cell = boardPx / BOARD_SIZE;
+    const boardX = (width - boardPx) / 2;
+    const boardY = (height - boardPx) / 2;
+
+    return {
+        unitsPerMm,
+        width,
+        height,
+        boardPx,
+        cell,
+        boardX,
+        boardY
+    };
+}
+
 async function prepareExitIcon() {
     try {
         const response = await fetch("./espejo.svg", { cache: "force-cache" });
@@ -211,54 +236,26 @@ async function prepareExitIcon() {
     }
 }
 
-function createBoardSvg(withCoins) {
-    const margin = 70;
-    const cell = 110;
-    const boardPx = BOARD_SIZE * cell;
-    const width = boardPx + margin * 2;
-    const height = boardPx + margin * 2 + 65;
+function createBoardSvg(withCoins, pageWidthMm = 210, pageHeightMm = 297) {
+    const { width, height, boardPx, cell, boardX, boardY } = getBoardLayoutMetrics(pageWidthMm, pageHeightMm);
 
-    const svg = createSvg("297mm", "297mm", `0 0 ${width} ${height}`);
+    const outerStroke = Math.max(3, cell * 0.07);
+    const middleLine = Math.max(2, cell * 0.055);
+    const highlightStroke = Math.max(2, cell * 0.055);
+    const coinRadius = cell * 0.32;
 
-    addRect(svg, { x: 0, y: 0, width, height, fill: "#f5f7f4" });
-    addText(
-        svg,
-        {
-            x: width / 2,
-            y: 45,
-            "text-anchor": "middle",
-            "font-size": 30,
-            "font-family": "Trebuchet MS, Segoe UI, sans-serif",
-            "font-weight": "800",
-            fill: "#253028"
-        },
-        withCoins
-            ? "Ajedrez Espejo - Tablero con monedas aleatorias equilibradas"
-            : "Ajedrez Espejo - Tablero limpio"
-    );
+    const svg = createSvg(`${pageWidthMm}mm`, `${pageHeightMm}mm`, `0 0 ${width} ${height}`);
 
     const boardGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    boardGroup.setAttribute("transform", `translate(${margin}, ${margin})`);
+    boardGroup.setAttribute("transform", `translate(${boardX}, ${boardY})`);
     svg.appendChild(boardGroup);
 
-    // Dibuja la mitad inferior (filas 4-7) normal
-    for (let y = 4; y < BOARD_SIZE; y++) {
+    // Dibuja el tablero completo con patron clasico de ajedrez (sin espejado)
+    for (let y = 0; y < BOARD_SIZE; y++) {
         for (let x = 0; x < BOARD_SIZE; x++) {
             addRect(boardGroup, {
                 x: x * cell,
                 y: y * cell,
-                width: cell,
-                height: cell,
-                fill: (x + y) % 2 === 0 ? "#edf0f3" : "#b8bdc4"
-            });
-        }
-    }
-    // Dibuja la mitad superior (filas 0-3) invertida verticalmente
-    for (let y = 0; y < 4; y++) {
-        for (let x = 0; x < BOARD_SIZE; x++) {
-            addRect(boardGroup, {
-                x: x * cell,
-                y: (3 - y) * cell,
                 width: cell,
                 height: cell,
                 fill: (x + y) % 2 === 0 ? "#edf0f3" : "#b8bdc4"
@@ -273,14 +270,14 @@ function createBoardSvg(withCoins) {
         height: boardPx,
         fill: "none",
         stroke: "#2f3631",
-        "stroke-width": 8
+        "stroke-width": outerStroke
     });
 
     addRect(boardGroup, {
         x: 0,
-        y: boardPx / 2 - 3,
+        y: boardPx / 2 - middleLine / 2,
         width: boardPx,
-        height: 6,
+        height: middleLine,
         fill: "#aa304a"
     });
 
@@ -291,7 +288,7 @@ function createBoardSvg(withCoins) {
         height: cell,
         fill: "none",
         stroke: "#ffd766",
-        "stroke-width": 6
+        "stroke-width": highlightStroke
     });
     addRect(boardGroup, {
         x: 0,
@@ -300,7 +297,7 @@ function createBoardSvg(withCoins) {
         height: cell,
         fill: "none",
         stroke: "#ffd766",
-        "stroke-width": 6
+        "stroke-width": highlightStroke
     });
 
     // Salida inferior (normal)
@@ -316,98 +313,67 @@ function createBoardSvg(withCoins) {
             for (let x = 0; x < BOARD_SIZE; x++) {
                 if (isReserved(x, y)) continue;
                 const value = pool[index++];
-                drawCoin(boardGroup, x * cell + cell / 2, y * cell + cell / 2, 34, value, false);
+                drawCoin(boardGroup, x * cell + cell / 2, y * cell + cell / 2, coinRadius, value, false);
             }
         }
-        // Mitad superior (filas 0-3) invertida visualmente y rotada
+        // Mitad superior (filas 0-3) se mantiene en su posicion, pero rotada para el jugador opuesto
         for (let y = 0; y < 4; y++) {
             for (let x = 0; x < BOARD_SIZE; x++) {
-                // Chequear reserva en la posición de destino (x, 3-y)
-                if (isReserved(x, 3 - y)) continue;
+                if (isReserved(x, y)) continue;
                 const value = pool[index++];
-                drawCoin(boardGroup, x * cell + cell / 2, (3 - y) * cell + cell / 2, 34, value, true);
+                drawCoin(boardGroup, x * cell + cell / 2, y * cell + cell / 2, coinRadius, value, true);
             }
         }
     }
-
-    addText(
-        svg,
-        {
-            x: width / 2,
-            y: height - 18,
-            "text-anchor": "middle",
-            "font-size": 19,
-            "font-family": "Trebuchet MS, Segoe UI, sans-serif",
-            fill: "#465349"
-        },
-        withCoins ? "60 monedas totales: 12 de cada valor" : "Formato vectorial listo para impresion"
-    );
 
     return serializeSvg(svg);
 }
 
 function createCoinsSheetSvg() {
+    const sheetWidthMm = 297;
+    const sheetHeightMm = 210;
     const width = 1400;
     const height = 1000;
-    const svg = createSvg("297mm", "210mm", `0 0 ${width} ${height}`);
+    const svg = createSvg(`${sheetWidthMm}mm`, `${sheetHeightMm}mm`, `0 0 ${width} ${height}`);
 
     addRect(svg, { x: 0, y: 0, width, height, fill: "#fffdf8" });
-    addText(
-        svg,
-        {
-            x: width / 2,
-            y: 60,
-            "text-anchor": "middle",
-            "font-size": 42,
-            "font-family": "Trebuchet MS, Segoe UI, sans-serif",
-            "font-weight": "800",
-            fill: "#263328"
-        },
-        "Monedas Ajedrez Espejo (equilibradas)"
-    );
 
-    const perValue = 12;
+    const perValue = 6;
     const cols = 6;
-    const spacingX = 175;
-    const spacingY = 150;
-    const startX = 170;
-    const startY = 150;
+    const rowsPerValue = perValue / cols;
+
+    // Layout expandido para ocupar casi toda la hoja con monedas.
+    const contentLeft = 16;
+    const contentRight = width - 16;
+    const top = 16;
+    const bottom = 16;
+    const minColGap = 10;
+    const groupGap = 6;
+    const groups = COIN_VALUES.length;
+
+    const contentWidth = contentRight - contentLeft;
+    const usableH = height - top - bottom - (groups - 1) * groupGap;
+    const maxRadiusByHeight = Math.floor(usableH / (groups * 2));
+    const maxRadiusByWidth = Math.floor((contentWidth - (cols - 1) * minColGap) / (2 * cols));
+
+    const maxFitRadius = Math.min(maxRadiusByHeight, maxRadiusByWidth);
+    // Se prioriza llenar el area util de la hoja con monedas sin solape.
+    const coinRadius = maxFitRadius;
+    const rowSpacing = coinRadius * 2;
+    const groupHeight = rowSpacing * rowsPerValue;
+    const colSpacing = (contentRight - contentLeft - coinRadius * 2) / (cols - 1);
 
     COIN_VALUES.forEach((value, row) => {
-        addText(
-            svg,
-            {
-                x: 55,
-                y: startY + row * spacingY + 12,
-                "font-size": 34,
-                "font-family": "Trebuchet MS, Segoe UI, sans-serif",
-                "font-weight": "800",
-                fill: "#333"
-            },
-            `${value} pts`
-        );
+        const groupTop = top + row * (groupHeight + groupGap);
 
         for (let i = 0; i < perValue; i++) {
             const col = i % cols;
             const line = Math.floor(i / cols);
-            const cx = startX + col * spacingX;
-            const cy = startY + row * spacingY + line * 64;
-            drawCoin(svg, cx, cy, 48, value);
+            const cx = contentLeft + coinRadius + col * colSpacing;
+            const cy = groupTop + coinRadius + line * rowSpacing;
+            drawCoin(svg, cx, cy, coinRadius, value);
         }
     });
-
-    addText(
-        svg,
-        {
-            x: width / 2,
-            y: height - 24,
-            "text-anchor": "middle",
-            "font-size": 28,
-            "font-family": "Trebuchet MS, Segoe UI, sans-serif",
-            fill: "#4a594e"
-        },
-        "Total: 60 monedas (12 por cada valor)"
-    );
 
     return serializeSvg(svg);
 }
@@ -568,13 +534,13 @@ function getPrintSettings() {
     };
 }
 
-function getSelectedPrintContent() {
+function getSelectedPrintContent(settings) {
     const target = document.getElementById("print-target").value;
-    if (target === "board-clean") return createBoardSvg(false);
+    if (target === "board-clean") return createBoardSvg(false, settings.pageWidthMm, settings.pageHeightMm);
     if (target === "coins") return createCoinsSheetSvg();
     if (target === "kings") return createKingsSheetSvg();
     if (target === "full") return createFullSheetSvg();
-    return randomBoardSvg;
+    return createBoardSvg(true, settings.pageWidthMm, settings.pageHeightMm);
 }
 
 function openPrintWindow(svgContent, settings) {
@@ -618,7 +584,7 @@ function bindEvents() {
     });
 
     document.getElementById("download-coins-sheet").addEventListener("click", () => {
-        downloadTextFile("mirrorchess-coins-balanced.svg", createCoinsSheetSvg(), "image/svg+xml;charset=utf-8");
+        downloadTextFile("mirrorchess-coins-half-set.svg", createCoinsSheetSvg(), "image/svg+xml;charset=utf-8");
     });
 
     document.getElementById("download-kings-sheet").addEventListener("click", () => {
@@ -631,7 +597,7 @@ function bindEvents() {
 
     document.getElementById("print-selected").addEventListener("click", () => {
         const settings = getPrintSettings();
-        const content = getSelectedPrintContent();
+        const content = getSelectedPrintContent(settings);
         openPrintWindow(content, settings);
     });
 }

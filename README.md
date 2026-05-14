@@ -100,5 +100,5 @@ Sugerencia para PDF: abrir la vista previa y usar la opcion de imprimir del nave
 
 
 Recursos externos:
-El espejo, cuya licencia es de dominio publico, fue tomado de la siguiente pagina 
+La imagen del espejo, cuya licencia es de dominio publico, fue tomado de la siguiente pagina 
 https://freesvg.org/vector-graphics-of-freestanding-mirror-with-wooden-frame
